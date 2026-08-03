@@ -50,37 +50,57 @@ class Solution(object):
 # --------------MEMOIZATION --------------------
 # Time: O(n × m)
 # Space: O(n × m) (memo) + O(n) recursion stack
+        # n = len(s)
+        # m = len(t)
+
+        # if m > n:
+        #     return 0
+
+        # memo = {}
+
+        # def dfs(i, j):
+
+        #     if (i, j) in memo:
+        #         return memo[(i, j)]
+
+        #     if j == m:
+        #         return 1
+
+        #     if i == n or (m - j > n - i):
+        #         return 0
+
+        #     if s[i] == t[j]:
+        #         take = dfs(i + 1, j + 1)
+        #         skip = dfs(i + 1, j)
+        #         memo[(i, j)] = take + skip
+        #     else:
+        #         memo[(i, j)] = dfs(i + 1, j)
+
+        #     return memo[(i, j)]
+
+        # return dfs(0, 0)
+
+# ---------------TABULATION -------------------
         n = len(s)
         m = len(t)
 
         if m > n:
             return 0
 
-        memo = {}
+        dp = [[0] * (m + 1) for _ in range(n + 1)]
 
-        def dfs(i, j):
+        # Base Case
+        for i in range(n + 1):
+            dp[i][m] = 1
 
-            if (i, j) in memo:
-                return memo[(i, j)]
+        # Fill DP table
+        for i in range(n - 1, -1, -1):
+            for j in range(m - 1, -1, -1):
 
-            if j == m:
-                return 1
+                if s[i] == t[j]:
+                    dp[i][j] = dp[i + 1][j + 1] + dp[i + 1][j]
+                else:
+                    dp[i][j] = dp[i + 1][j]
 
-            if i == n or (m - j > n - i):
-                return 0
-
-            if s[i] == t[j]:
-                take = dfs(i + 1, j + 1)
-                skip = dfs(i + 1, j)
-                memo[(i, j)] = take + skip
-            else:
-                memo[(i, j)] = dfs(i + 1, j)
-
-            return memo[(i, j)]
-
-        return dfs(0, 0)
-
-# ---------------TABULATION -------------------
-
-
+        return dp[0][0]
         
