@@ -6,30 +6,6 @@ class Solution(object):
         :rtype: List[List[int]]
         """
 
-# -----------------Brute Force (Insert → Sort → Merge)-----------
-# Time: O(n log n)
-# Space: O(n)
-        # Step 1: Insert new interval
-        # intervals.append(newInterval)
-
-        # # Step 2: Sort by start time
-        # intervals.sort(key=lambda x: x[0])
-
-        # res = []
-
-        # # Step 3: Merge intervals
-        # for interval in intervals:
-
-        #     if not res or res[-1][1] < interval[0]:
-        #         res.append(interval)
-        #     else:
-        #         res[-1][1] = max(res[-1][1], interval[1])
-
-        # return res
-
-# ----------------Linear Scan + Merge----------------
-# Time: O(n)
-# Space: O(n)
         res = []
 
         i = 0
@@ -55,11 +31,3 @@ class Solution(object):
             i += 1
 
         return res
-
-
-
-
-
-
-
-        
