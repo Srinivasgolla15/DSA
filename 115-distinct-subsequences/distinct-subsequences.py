@@ -81,26 +81,104 @@ class Solution(object):
         # return dfs(0, 0)
 
 # ---------------TABULATION -------------------
+        # n = len(s)
+        # m = len(t)
+
+        # # If target is longer than source,
+        # # it's impossible to form t
+        # if m > n:
+        #     return 0
+
+        # # -------------------------------------------------------
+        # # dp[i][j] = Number of ways to form t[j:]
+        # #            using s[i:]
+        # #
+        # # Extra row  -> i == n (source exhausted)
+        # # Extra col  -> j == m (target exhausted)
+        # # -------------------------------------------------------
+        # dp = [[0] * (m + 1) for _ in range(n + 1)]
+
+        # # ---------------- Base Case ----------------
+        # # Empty target ("") can always be formed
+        # # by choosing nothing from any suffix of s.
+        # #
+        # # Therefore:
+        # # dp[i][m] = 1 for every i
+        # for i in range(n + 1):
+        #     dp[i][m] = 1
+
+        # # ---------------- Fill DP Table ----------------
+        # # Fill from Bottom -> Top because
+        # # current row depends on the row below.
+        # for i in range(n - 1, -1, -1):
+
+        #     # Fill from Right -> Left because
+        #     # current cell depends on j+1.
+        #     for j in range(m - 1, -1, -1):
+
+        #         # Characters match
+        #         if s[i] == t[j]:
+
+        #             # Take current character
+        #             # +
+        #             # Skip current character
+        #             dp[i][j] = dp[i + 1][j + 1] + dp[i + 1][j]
+
+        #         else:
+        #             # Characters don't match,
+        #             # so we must skip s[i]
+        #             dp[i][j] = dp[i + 1][j]
+
+        # # dp[0][0] = Number of ways to form
+        # # the entire target using the entire source
+        # return dp[0][0]
+
+
+# ----------SPACE OPTIMIZED----------------
         n = len(s)
         m = len(t)
 
+        # Impossible if target is longer than source
         if m > n:
             return 0
 
-        dp = [[0] * (m + 1) for _ in range(n + 1)]
+        # --------------------------------------------------
+        # dp[j] = Number of ways to form t[j:]
+        #         using the current suffix of s
+        #
+        # Initially, dp represents the last row (i = n).
+        # --------------------------------------------------
+        dp = [0] * (m + 1)
 
-        # Base Case
-        for i in range(n + 1):
-            dp[i][m] = 1
+        # Base Case:
+        # Empty target can always be formed in one way.
+        dp[m] = 1
 
-        # Fill DP table
+        # Process rows from bottom to top
         for i in range(n - 1, -1, -1):
+
+            # prev stores dp[i+1][j+1] (diagonal value)
+            prev = dp[m]
+
+            # Traverse columns from right to left
             for j in range(m - 1, -1, -1):
 
-                if s[i] == t[j]:
-                    dp[i][j] = dp[i + 1][j + 1] + dp[i + 1][j]
-                else:
-                    dp[i][j] = dp[i + 1][j]
+                # Save old dp[j] before overwriting.
+                # This is dp[i+1][j].
+                temp = dp[j]
 
-        return dp[0][0]
-        
+                if s[i] == t[j]:
+                    # Take current character
+                    # +
+                    # Skip current character
+                    dp[j] = prev + dp[j]
+
+                # Else:
+                # dp[j] already represents dp[i+1][j],
+                # so nothing needs to be changed.
+
+                # Move diagonal for next iteration
+                prev = temp
+
+        # Number of ways to form entire t from entire s
+        return dp[0]
