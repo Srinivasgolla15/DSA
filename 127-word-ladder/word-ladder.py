@@ -55,54 +55,107 @@ class Solution(object):
 # O(N) 
 
         # Convert list to set for O(1) lookup
-        words = set(wordList)
+        # words = set(wordList)
 
-        # If endWord doesn't exist, answer is impossible
-        if endWord not in words:
+        # # If endWord doesn't exist, answer is impossible
+        # if endWord not in words:
+        #     return 0
+
+        # # Two queues
+        # beginQueue = deque([beginWord])
+        # endQueue = deque([endWord])
+
+        # # Store visited + distance
+        # fromBegin = {beginWord: 1}
+        # fromEnd = {endWord: 1}
+
+        # alphabets = "abcdefghijklmnopqrstuvwxyz"
+
+        # while beginQueue and endQueue:
+
+        #     # Always expand the smaller side
+        #     if len(beginQueue) > len(endQueue):
+        #         beginQueue, endQueue = endQueue, beginQueue
+        #         fromBegin, fromEnd = fromEnd, fromBegin
+
+        #     # Process one level
+        #     for _ in range(len(beginQueue)):
+
+        #         word = beginQueue.popleft()
+        #         level = fromBegin[word]
+
+        #         # Change every character
+        #         for i in range(len(word)):
+
+        #             left = word[:i]
+        #             right = word[i+1:]
+
+        #             for ch in alphabets:
+
+        #                 newWord = left + ch + right
+
+        #                 # Searches meet
+        #                 if newWord in fromEnd:
+        #                     return level + fromEnd[newWord]
+
+        #                 # Valid unseen word
+        #                 if newWord in words and newWord not in fromBegin:
+
+        #                     fromBegin[newWord] = level + 1
+        #                     beginQueue.append(newWord)
+
+        # return 0
+
+# ---------------BFS+ WILDCARD PATTERN--------------------
+# O(NL²)  
+# O(N) 
+        if endWord not in wordList:
             return 0
 
-        # Two queues
-        beginQueue = deque([beginWord])
-        endQueue = deque([endWord])
+        L = len(beginWord)
 
-        # Store visited + distance
-        fromBegin = {beginWord: 1}
-        fromEnd = {endWord: 1}
+        # Pattern -> words map
+        patternMap = defaultdict(list)
 
-        alphabets = "abcdefghijklmnopqrstuvwxyz"
+        # Build wildcard patterns
+        for word in wordList:
 
-        while beginQueue and endQueue:
+            for i in range(L):
 
-            # Always expand the smaller side
-            if len(beginQueue) > len(endQueue):
-                beginQueue, endQueue = endQueue, beginQueue
-                fromBegin, fromEnd = fromEnd, fromBegin
+                pattern = word[:i] + "*" + word[i+1:]
 
-            # Process one level
-            for _ in range(len(beginQueue)):
+                patternMap[pattern].append(word)
 
-                word = beginQueue.popleft()
-                level = fromBegin[word]
+        # BFS
+        queue = deque([(beginWord, 1)])
 
-                # Change every character
-                for i in range(len(word)):
+        visited = set()
+        visited.add(beginWord)
 
-                    left = word[:i]
-                    right = word[i+1:]
+        while queue:
 
-                    for ch in alphabets:
+            word, level = queue.popleft()
 
-                        newWord = left + ch + right
+            # Reached target
+            if word == endWord:
+                return level
 
-                        # Searches meet
-                        if newWord in fromEnd:
-                            return level + fromEnd[newWord]
+            # Generate patterns
+            for i in range(L):
 
-                        # Valid unseen word
-                        if newWord in words and newWord not in fromBegin:
+                pattern = word[:i] + "*" + word[i+1:]
 
-                            fromBegin[newWord] = level + 1
-                            beginQueue.append(newWord)
+                # Visit all neighbors
+                for neighbor in patternMap[pattern]:
+
+                    if neighbor not in visited:
+
+                        visited.add(neighbor)
+                        queue.append((neighbor, level + 1))
+
+                # Optimization:
+                # clear list after use
+                patternMap[pattern] = []
 
         return 0
 
