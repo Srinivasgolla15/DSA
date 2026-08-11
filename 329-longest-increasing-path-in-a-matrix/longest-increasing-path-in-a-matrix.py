@@ -5,7 +5,23 @@ class Solution(object):
         :rtype: int
         """
 
-# ---------------
+# -------------------- DFS+ MEMOIZATION -------------------- 
+
+# Time Complexity: O(m * n)
+# - There are m * n cells.
+# - Each cell's DFS is calculated only once because of memoization.
+# - For each cell, we check 4 directions.
+# - 4 is constant, so total = O(m * n).
+#
+# Space Complexity: O(m * n)
+# - memo stores the answer for every cell: O(m * n)
+# - Recursion stack can be O(m * n) in the worst case.
+#
+# Overall:
+# Time  = O(m * n)
+# Space = O(m * n)
+        if not matrix or not matrix[0]:
+            return 0
         m = len(matrix)
         n = len(matrix[0])
         memo = {}
