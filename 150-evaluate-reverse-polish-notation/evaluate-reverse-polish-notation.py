@@ -5,30 +5,28 @@ class Solution(object):
 
         for token in tokens:
 
-            # If token is a number
             if token not in "+-*/":
                 stack.append(int(token))
+                continue
+
+            b = stack.pop()
+            a = stack.pop()
+
+            if token == "+":
+                result = a + b
+
+            elif token == "-":
+                result = a - b
+
+            elif token == "*":
+                result = a * b
 
             else:
-                # IMPORTANT:
-                # b is the second operand
-                # a is the first operand
-                b = stack.pop()
-                a = stack.pop()
+                result = abs(a) // abs(b)
 
-                if token == "+":
-                    result = a + b
+                if (a < 0) != (b < 0):
+                    result = -result
 
-                elif token == "-":
-                    result = a - b
-
-                elif token == "*":
-                    result = a * b
-
-                elif token == "/":
-                    # Truncate toward zero
-                    result = int(float(a) / b)
-
-                stack.append(result)
+            stack.append(result)
 
         return stack[-1]
