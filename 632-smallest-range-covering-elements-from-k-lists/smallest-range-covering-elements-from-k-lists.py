@@ -4,51 +4,40 @@ class Solution(object):
         :type nums: List[List[int]]
         :rtype: List[int]
         """
+
+# --------------MIN - HEAP + SLIDING WINDOW ------------------
+# Time  = O(N log k)
+# Space = O(k)
+
         heap = []
+        maxi = float('-inf')
 
-        # Put the first element of every list into the heap
-        max_val = float('-inf')
-
+        # take first element from every list
         for i in range(len(nums)):
-            val = nums[i][0]
+            heapq.heappush(heap, (nums[i][0], i, 0))
+            maxi = max(maxi, nums[i][0])
 
-            heapq.heappush(heap, (val, i, 0))
-
-            max_val = max(max_val, val)
-
-        # Initial best range
-        best_left = heap[0][0]
-        best_right = max_val
+        ans = [heap[0][0], maxi]
 
         while True:
 
-            # Get the smallest current element
-            min_val, list_idx, element_idx = heapq.heappop(heap)
+            mini, row, col = heapq.heappop(heap)
 
-            # Current range covers one element from every list
-            if max_val - min_val < best_right - best_left:
-                best_left = min_val
-                best_right = max_val
+            # current range
+            if maxi - mini < ans[1] - ans[0]:
+                ans = [mini, maxi]
 
-            # Move to the next element in the same list
-            next_idx = element_idx + 1
+            # move to next element in the same list
+            col += 1
 
-            # If this list has no more elements,
-            # we can no longer have one element from every list
-            if next_idx == len(nums[list_idx]):
+            if col == len(nums[row]):
                 break
 
-            next_val = nums[list_idx][next_idx]
+            val = nums[row][col]
+            heapq.heappush(heap, (val, row, col))
 
-            # Put next element from this list into heap
-            heapq.heappush(
-                heap,
-                (next_val, list_idx, next_idx)
-            )
+            maxi = max(maxi, val)
 
-            # Update maximum
-            max_val = max(max_val, next_val)
-
-        return [best_left, best_right]
+        return ans
         
 
