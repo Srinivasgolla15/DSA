@@ -87,37 +87,71 @@ class Solution(object):
         # return path
 
 # --------------------Hierholzer + Sorting------------
+        # graph = defaultdict(list)
+
+        # # Build graph
+        # for u, v in tickets:
+        #     graph[u].append(v)
+
+        # # Sort destinations lexicographically
+        # for airport in graph:
+        #     # graph[airport].sort( )
+        #     graph[airport].sort(reverse=True)
+
+        # result = []
+
+        # def dfs(airport):
+
+        #     # Keep consuming available tickets
+        #     while graph[airport]:
+
+        #         # Smallest destination
+        #         # next_airport = graph[airport].pop(0)
+        #         next_airport = graph[airport].pop()
+
+        #         dfs(next_airport)
+
+        #     # Add while backtracking
+        #     result.append(airport)
+
+        # dfs("JFK")
+
+        # # We constructed it backwards
+        # return result[::-1]
+
+# Time:  O(E log E)  # Sorting all adjacency lists
+# Space: O(E + V)    # Graph + result + recursion  
+
+
+
+# -----------------------Hierholzer + Min Heap------------------
+
         graph = defaultdict(list)
 
         # Build graph
         for u, v in tickets:
-            graph[u].append(v)
-
-        # Sort destinations lexicographically
-        for airport in graph:
-            graph[airport].sort(reverse=True)
+            heapq.heappush(graph[u], v)
 
         result = []
 
         def dfs(airport):
 
-            # Keep consuming available tickets
+            # Consume smallest available ticket
             while graph[airport]:
 
-                # Smallest destination
-                next_airport = graph[airport].pop()
+                next_airport = heapq.heappop(graph[airport])
 
                 dfs(next_airport)
 
-            # Add while backtracking
+            # Add during backtracking
             result.append(airport)
 
         dfs("JFK")
 
-        # We constructed it backwards
+        # Constructed backwards
         return result[::-1]
 
-# Time:  O(E log E)  # Sorting all adjacency lists
-# Space: O(E + V)    # Graph + result + recursion  
+# Time:  O(E log E)  # Heap operations
+# Space: O(E + V)    # Graph + result + recursion
 
 
