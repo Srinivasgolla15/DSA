@@ -62,26 +62,82 @@ class Solution(object):
         # return result if len(result)==len(s) else ""
 
 
-# -------------Optimized greedy ---------------
-        freq = [0] * 26
-        for char in s:
-            freq[ord(char)-ord("a")]+=1
-        max_idx = freq.index(max(freq))
-        max_freq = freq[max_idx]
-        if max_freq >(len(s)+1) //2:
+
+        freq = Counter(s)
+        n = len(s)
+
+        # Find the most frequent character
+        max_char = max(freq, key=freq.get)
+        max_count = freq[max_char]
+
+        # Impossible if the most frequent character
+        # appears more than half of the positions
+        if max_count > (n + 1) // 2:
             return ""
-        res = [''] * len(s)
+
+        res = [""] * n
+
+        # Start with even positions
         idx = 0
-        max_char = chr(max_idx+ord("a"))
-        while freq[max_idx]>0:
+
+        # Place the most frequent character first
+        while freq[max_char] > 0:
             res[idx] = max_char
-            idx +=2
-            freq[max_idx] -=1
-        for i in range(26):
-            while freq[i] >0:
-                if idx >= len(s):
+            freq[max_char] -= 1
+
+            idx += 2
+
+        # Place all remaining characters
+        for char, count in freq.items():
+
+            while count > 0:
+
+                # Even positions are finished
+                # Switch to odd positions
+                if idx >= n:
                     idx = 1
-                res[idx] = chr(i+ord("a"))
-                idx+=2
-                freq[i] -=1
+
+                res[idx] = char
+                count -= 1
+
+                idx += 2
+
         return "".join(res)
+
+
+# Time: O(N)
+# Space: O(N + K) = O(N)
+#
+# N = length of s
+# K = number of distinct characters
+#
+# Counter -> O(N)
+# Finding max -> O(K)
+# Filling result -> O(N)
+#
+# Total -> O(N)
+
+
+# -------------Optimized greedy ---------------
+        # freq = [0] * 26
+        # for char in s:
+        #     freq[ord(char)-ord("a")]+=1
+        # max_idx = freq.index(max(freq))
+        # max_freq = freq[max_idx]
+        # if max_freq >(len(s)+1) //2:
+        #     return ""
+        # res = [''] * len(s)
+        # idx = 0
+        # max_char = chr(max_idx+ord("a"))
+        # while freq[max_idx]>0:
+        #     res[idx] = max_char
+        #     idx +=2
+        #     freq[max_idx] -=1
+        # for i in range(26):
+        #     while freq[i] >0:
+        #         if idx >= len(s):
+        #             idx = 1
+        #         res[idx] = chr(i+ord("a"))
+        #         idx+=2
+        #         freq[i] -=1
+        # return "".join(res)
