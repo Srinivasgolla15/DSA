@@ -31,44 +31,85 @@ class Solution(object):
 #
 # Total Space: O(n + L²)
 
+        # wordSet = set(words)
+        # memo = {}
+
+        # def canForm(word, start, count):
+
+        #     # We reached the end
+        #     if start == len(word):
+        #         return count >= 2
+
+        #     # Already solved this state
+        #     key = (start, count)
+
+        #     if key in memo:
+        #         return memo[key]
+
+        #     # Try every possible next word
+        #     for end in range(start + 1, len(word) + 1):
+
+        #         part = word[start:end]
+
+        #         if part in wordSet:
+        #             if canForm(word, end, count + 1):
+        #                 memo[key] = True
+        #                 return True
+
+        #     memo[key] = False
+        #     return False
+
+        # ans = []
+
+        # for word in words:
+
+        #     # Don't let the word use itself as one piece
+        #     wordSet.remove(word)
+
+        #     memo = {}
+
+        #     if canForm(word, 0, 0):
+        #         ans.append(word)
+
+        #     wordSet.add(word)
+
+        # return ans
+
+
+
         wordSet = set(words)
-        memo = {}
-
-        def canForm(word, start, count):
-
-            # We reached the end
-            if start == len(word):
-                return count >= 2
-
-            # Already solved this state
-            key = (start, count)
-
-            if key in memo:
-                return memo[key]
-
-            # Try every possible next word
-            for end in range(start + 1, len(word) + 1):
-
-                part = word[start:end]
-
-                if part in wordSet:
-                    if canForm(word, end, count + 1):
-                        memo[key] = True
-                        return True
-
-            memo[key] = False
-            return False
-
         ans = []
+
+        def canForm(word):
+            n = len(word)
+
+            # dp[i] = can we form word[0:i]
+            dp = [False] * (n + 1)
+            dp[0] = True
+
+            # Try every starting position
+            for i in range(n):
+
+                if not dp[i]:
+                    continue
+
+                # Try every possible next word
+                for j in range(i + 1, n + 1):
+
+                    part = word[i:j]
+
+                    if part in wordSet:
+                        dp[j] = True
+
+            return dp[n]
 
         for word in words:
 
-            # Don't let the word use itself as one piece
+            # Temporarily remove the word itself
+            # so it cannot use itself as the only word.
             wordSet.remove(word)
 
-            memo = {}
-
-            if canForm(word, 0, 0):
+            if canForm(word):
                 ans.append(word)
 
             wordSet.add(word)
