@@ -76,42 +76,123 @@ class Solution(object):
         # return ans
 
 
+# ------------hashset ------------------------
+        # wordSet = set(words)
+        # ans = []
 
-        wordSet = set(words)
+        # def canForm(word):
+        #     n = len(word)
+
+        #     # dp[i] = can we form word[0:i]
+        #     dp = [False] * (n + 1)
+        #     dp[0] = True
+
+        #     # Try every starting position
+        #     for i in range(n):
+
+        #         if not dp[i]:
+        #             continue
+
+        #         # Try every possible next word
+        #         for j in range(i + 1, n + 1):
+
+        #             part = word[i:j]
+
+        #             if part in wordSet:
+        #                 dp[j] = True
+
+        #     return dp[n]
+
+        # for word in words:
+
+        #     # Temporarily remove the word itself
+        #     # so it cannot use itself as the only word.
+        #     wordSet.remove(word)
+
+        #     if canForm(word):
+        #         ans.append(word)
+
+        #     wordSet.add(word)
+
+        # return ans
+
+
+
+class TrieNode(object):
+    def __init__(self):
+        self.children = {}
+        self.is_word = False
+
+
+class Solution(object):
+    def findAllConcatenatedWordsInADict(self, words):
+        root = TrieNode()
+
+        # ------------------------------------------------
+        # 1. Build Trie
+        # ------------------------------------------------
+        for word in words:
+            node = root
+
+            for ch in word:
+                if ch not in node.children:
+                    node.children[ch] = TrieNode()
+
+                node = node.children[ch]
+
+            node.is_word = True
+
         ans = []
 
-        def canForm(word):
-            n = len(word)
+        # ------------------------------------------------
+        # 2. Check one word
+        # ------------------------------------------------
+        def can_form(word):
 
-            # dp[i] = can we form word[0:i]
-            dp = [False] * (n + 1)
-            dp[0] = True
+            # memo[start] = whether word[start:] can be formed
+            memo = {}
 
-            # Try every starting position
-            for i in range(n):
+            def dfs(start, count):
 
-                if not dp[i]:
-                    continue
+                # Entire word is consumed
+                # Need at least 2 dictionary words
+                if start == len(word):
+                    return count >= 2
 
-                # Try every possible next word
-                for j in range(i + 1, n + 1):
+                if start in memo:
+                    return memo[start]
 
-                    part = word[i:j]
+                node = root
 
-                    if part in wordSet:
-                        dp[j] = True
+                # Try every possible prefix starting at 'start'
+                for i in range(start, len(word)):
 
-            return dp[n]
+                    ch = word[i]
 
+                    # No trie path -> no longer prefix possible
+                    if ch not in node.children:
+                        break
+
+                    node = node.children[ch]
+
+                    # word[start:i+1] is a dictionary word
+                    if node.is_word:
+
+                        # Cut here and solve the remaining suffix
+                        if dfs(i + 1, count + 1):
+                            memo[start] = True
+                            return True
+
+                memo[start] = False
+                return False
+
+            return dfs(0, 0)
+
+        # ------------------------------------------------
+        # 3. Find all concatenated words
+        # ------------------------------------------------
         for word in words:
-
-            # Temporarily remove the word itself
-            # so it cannot use itself as the only word.
-            wordSet.remove(word)
-
-            if canForm(word):
+            if can_form(word):
                 ans.append(word)
-
-            wordSet.add(word)
 
         return ans
