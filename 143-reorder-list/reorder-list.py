@@ -1,5 +1,7 @@
 class Solution(object):
     def reorderList(self, head):
+        if head is None or head.next is None:
+            return
 
         slow = head
         fast = head
