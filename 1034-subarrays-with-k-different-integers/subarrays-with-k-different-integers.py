@@ -38,19 +38,31 @@ class Solution(object):
             hm = {}
             count = 0
             for right in range(len(nums)):
-                
-                if len(hm) <= m :
-                    if nums[right] in hm:
-                        hm[nums[right]]+=1
-                    else: 
-                        hm[nums[right]] = 1
-                    
+                if nums[right] in hm:
+                    hm[nums[right]] += 1
+                else:
+                    hm[nums[right]] = 1
                 while len(hm) > m:
-                    hm[nums[left]]-=1
+                    hm[nums[left]] -= 1
+
                     if hm[nums[left]] == 0:
                         del hm[nums[left]]
-                    left+=1
-                count += right-left+1
+                    left += 1
+                count += right - left + 1
+            # for right in range(len(nums)):
+                
+            #     if len(hm) <= m :
+            #         if nums[right] in hm:
+            #             hm[nums[right]]+=1
+            #         else: 
+            #             hm[nums[right]] = 1
+                    
+            #     while len(hm) > m:
+            #         hm[nums[left]]-=1
+            #         if hm[nums[left]] == 0:
+            #             del hm[nums[left]]
+            #         left+=1
+            #     count += right-left+1
                     
 
             return count
