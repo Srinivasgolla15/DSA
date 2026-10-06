@@ -61,19 +61,36 @@ class Solution(object):
 
 
 # ---------------BINARY SEARCH O(NlogN) O(n)-------------------
-        lis = []
-        for num in nums:
-            left = 0
-            right = len(lis)
+        # lis = []
+        # for num in nums:
+        #     left = 0
+        #     right = len(lis)
 
-            while left<right:
-                mid = (left+right)//2
-                if lis[mid]<num:
-                    left=mid+1
-                else:
-                    right = mid
-            if left!=len(lis):
-                lis[left] = num
-            else:
+        #     while left<right:
+        #         mid = (left+right)//2
+        #         if lis[mid]<num:
+        #             left=mid+1
+        #         else:
+        #             right = mid
+        #     if left!=len(lis):
+        #         lis[left] = num
+        #     else:
+        #         lis.append(num)
+        # return len(lis)
+
+
+# bisect
+        lis = []
+
+        for num in nums:
+            # Find first position where lis[pos] >= num
+            pos = bisect_left(lis, num)
+
+            # Replace or extend
+            if pos == len(lis):
                 lis.append(num)
+            else:
+                lis[pos] = num
+
         return len(lis)
+
