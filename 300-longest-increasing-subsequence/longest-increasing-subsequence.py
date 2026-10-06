@@ -5,20 +5,20 @@ class Solution(object):
         :rtype: int
         """
 
-#  --------------TWO LOOPS DP O(n^2) O(n)----------------------
-        n = len(nums)
+# #  --------------TWO LOOPS DP O(n^2) O(n)----------------------
+#         n = len(nums)
 
-        if n == 0:
-            return 0
+#         if n == 0:
+#             return 0
 
-        dp = [1] * n
+#         dp = [1] * n
 
-        for i in range(n):
-            for j in range(i):
-                if nums[j] < nums[i]:
-                    dp[i] = max(dp[i], dp[j] + 1)
+#         for i in range(n):
+#             for j in range(i):
+#                 if nums[j] < nums[i]:
+#                     dp[i] = max(dp[i], dp[j] + 1)
 
-        return max(dp)
+#         return max(dp)
 
 # ----------------------RECURSION O(2^n) O(n)-----------------------------
         # def rec(i, prev):
@@ -72,7 +72,7 @@ class Solution(object):
                     left=mid+1
                 else:
                     right = mid
-            if left!=len(tails):
+            if left!=len(lis):
                 lis[left] = num
             else:
                 lis.append(num)
