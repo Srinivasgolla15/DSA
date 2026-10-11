@@ -59,41 +59,72 @@ class Solution(object):
         # return dfs(0, 0, 0)
 
 # -------------------Memoization  --------------------------
-        n = len(rods)
-        memo = {}
+        # n = len(rods)
+        # memo = {}
 
-        def dfs(idx, diff):
-            if idx == n:
-                if diff == 0:
-                    return 0
-                return float('-inf')
+        # def dfs(idx, diff):
+        #     if idx == n:
+        #         if diff == 0:
+        #             return 0
+        #         return float('-inf')
 
-            key = (idx, diff)
+        #     key = (idx, diff)
 
-            if key in memo:
-                return memo[key]
+        #     if key in memo:
+        #         return memo[key]
 
-            rod = rods[idx]
+        #     rod = rods[idx]
 
-            # Put the rod on support A
-            takea = dfs(idx + 1, diff + rod)
+        #     # Put the rod on support A
+        #     takea = dfs(idx + 1, diff + rod)
 
-            # Put the rod on support B
-            takeb = min(diff, rod) +dfs(idx + 1, abs(diff - rod))
+        #     # Put the rod on support B with keeping the 
+        #     takeb = min(diff, rod) +dfs(idx + 1, abs(diff - rod))
 
-            # Skip the rod
-            skip = dfs(idx + 1, diff)
+        #     # Skip the rod
+        #     skip = dfs(idx + 1, diff)
 
-            memo[key] = max(takea, takeb, skip)
-            return memo[key]
+        #     memo[key] = max(takea, takeb, skip)
+        #     return memo[key]
 
-        return dfs(0, 0)
+        # return dfs(0, 0)
 
 
 # Time Complexity: O(n * S), where S = sum(rods)
 # Space Complexity: O(n * S) for memoization
 # Recursion Stack: O(n)
-            
+
+# -------------------TABULATIOn------------
+
+        dp = {0: 0}
+
+        for rod in rods:
+            curr = dp.copy()
+
+            for diff, height in curr.items():
+                # Add rod to the taller support
+                new_diff = diff + rod
+                dp[new_diff] = max(
+                    dp.get(new_diff, 0),
+                    height
+                )
+
+                # Add rod to the shorter support
+                new_diff = abs(diff - rod)
+                new_height = height + min(diff, rod)
+
+                dp[new_diff] = max(
+                    dp.get(new_diff, 0),
+                    new_height
+                )
+
+        return dp.get(0, 0)
+
+# Time Complexity: O(n * S), where S = sum(rods)
+# Auxiliary Space: O(S) for the DP dictionary
+# Temporary Space: O(S) for the copied dictionary
+# Total Auxiliary Space: O(S)
+                    
             
 
          
