@@ -72,6 +72,64 @@ class Solution(object):
         # return ans if ans != float('inf') else -1
 
 # ---------------memoization \(O(n^3)\) \(O(n^2k)\) for memo states, plus recursion stack-------------
+        # n = len(stones)
+
+        # if (n - 1) % (k - 1) != 0:
+        #     return -1
+
+        # prefix = [0] * (n + 1)
+
+        # for i in range(n):
+        #     prefix[i + 1] = prefix[i] + stones[i]
+
+        # def rangeSum(left, right):
+        #     return prefix[right + 1] - prefix[left]
+
+        # memo = {}
+
+        # def dfs(left, right, piles):
+        #     if right - left + 1 < piles:
+        #         return float('inf')
+
+        #     if left == right:
+        #         if piles == 1:
+        #             return 0
+        #         return float('inf')
+
+        #     key = (left, right, piles)
+
+        #     if key in memo:
+        #         return memo[key]
+
+        #     if piles == 1:
+        #         cost = dfs(left, right, k)
+
+        #         if cost != float('inf'):
+        #             cost += rangeSum(left, right)
+
+        #         memo[key] = cost
+        #         return cost
+
+        #     mini = float('inf')
+
+        #     mid = left
+
+        #     while mid < right:
+        #         left_cost = dfs(left, mid, 1)
+        #         right_cost = dfs(mid + 1, right, piles - 1)
+
+        #         mini = min(mini, left_cost + right_cost)
+
+        #         mid += k - 1
+
+        #     memo[key] = mini
+        #     return mini
+
+        # return dfs(0, n - 1, 1)
+
+# -------------Bottom-up 2D interval DP    \(O(n^3)\) \(O(n^3)\)	\(O(n^2)\)-------------
+
+
         n = len(stones)
 
         if (n - 1) % (k - 1) != 0:
@@ -82,47 +140,19 @@ class Solution(object):
         for i in range(n):
             prefix[i + 1] = prefix[i] + stones[i]
 
-        def rangeSum(left, right):
-            return prefix[right + 1] - prefix[left]
+        dp = [[0] * n for _ in range(n)]
 
-        memo = {}
+        for length in range(k, n + 1):
+            for left in range(n - length + 1):
+                right = left + length - 1
 
-        def dfs(left, right, piles):
-            if right - left + 1 < piles:
-                return float('inf')
+                dp[left][right] = float('inf')
 
-            if left == right:
-                if piles == 1:
-                    return 0
-                return float('inf')
+                for mid in range(left, right, k - 1):
+                    cost = dp[left][mid] + dp[mid + 1][right]
+                    dp[left][right] = min(dp[left][right], cost)
 
-            key = (left, right, piles)
+                if (length - 1) % (k - 1) == 0:
+                    dp[left][right] += prefix[right + 1] - prefix[left]
 
-            if key in memo:
-                return memo[key]
-
-            if piles == 1:
-                cost = dfs(left, right, k)
-
-                if cost != float('inf'):
-                    cost += rangeSum(left, right)
-
-                memo[key] = cost
-                return cost
-
-            mini = float('inf')
-
-            mid = left
-
-            while mid < right:
-                left_cost = dfs(left, mid, 1)
-                right_cost = dfs(mid + 1, right, piles - 1)
-
-                mini = min(mini, left_cost + right_cost)
-
-                mid += k - 1
-
-            memo[key] = mini
-            return mini
-
-        return dfs(0, n - 1, 1)
+        return dp[0][n - 1]       
