@@ -109,7 +109,7 @@
 class Solution:
     def findMaximumXOR(self, nums):
         ans, mask = 0, 0
-        for i in range(31, -1, -1):
+        for i in range(max(nums).bit_length(), -1, -1):
             mask |= 1<<i
             found = set([num & mask for num in nums])
                 
