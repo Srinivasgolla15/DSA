@@ -6,11 +6,11 @@ class Solution(object):
 
         while d >= n:
             i = 0
-            while (n << (i + 1)) <= d:
+            while (n << (i )) <= d:
                 i += 1
 
-            d -= n << i
-            res += 1 << i
+            d -= n << (i-1)
+            res += 1 << (i-1)
 
         if (dividend < 0) != (divisor < 0):
             res = -res
