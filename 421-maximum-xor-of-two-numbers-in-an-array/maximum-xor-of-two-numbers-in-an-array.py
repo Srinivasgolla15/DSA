@@ -106,14 +106,17 @@
 #         return res
 
 
-class Solution(object):
+class Solution:
     def findMaximumXOR(self, nums):
-        ans = 0
-        mask = 0
-        for i in range(max(nums).bit_length() - 1, -1, -1):
-            mask |= 1 << i                         # look at only the top bits so far
-            prefixes = {n & mask for n in nums}    # the top bits of every number
-            want = ans | (1 << i)                  # try to make this bit 1 in the answer
-            if any((want ^ p) in prefixes for p in prefixes):
-                ans = want                         # two prefixes XOR to `want`, so keep it
+        ans, mask = 0, 0
+        for i in range(31, -1, -1):
+            mask |= 1<<i
+            found = set([num & mask for num in nums])
+                
+            start = ans | 1<<i
+            for pref in found:
+                if start^pref in found:
+                    ans = start
+                    break
+         
         return ans
