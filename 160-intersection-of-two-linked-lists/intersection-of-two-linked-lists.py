@@ -39,41 +39,52 @@ class Solution(object):
 
         # return None
 
-        curr = headA
-        la = 0
-        lb = 0
-        currb = headB
-        skipA = 0
-        skipB = 0
+        # curr = headA
+        # la = 0
+        # lb = 0
+        # currb = headB
+        # skipA = 0
+        # skipB = 0
 
-        while curr:
-            la += 1
-            curr = curr.next
+        # while curr:
+        #     la += 1
+        #     curr = curr.next
 
-        curr = headA
+        # curr = headA
 
-        while currb:
-            lb += 1
-            currb = currb.next
+        # while currb:
+        #     lb += 1
+        #     currb = currb.next
 
-        currb = headB
+        # currb = headB
 
-        # Align both lists
-        if la > lb:
-            while skipA < la - lb:
-                curr = curr.next
-                skipA += 1
-        else:
-            while skipB < lb - la:
-                currb = currb.next
-                skipB += 1
+        # # Align both lists
+        # if la > lb:
+        #     while skipA < la - lb:
+        #         curr = curr.next
+        #         skipA += 1
+        # else:
+        #     while skipB < lb - la:
+        #         currb = currb.next
+        #         skipB += 1
 
-        # Compare nodes
-        while curr and currb:
-            if curr is currb:
-                return curr
+        # # Compare nodes
+        # while curr and currb:
+        #     if curr is currb:
+        #         return curr
 
-            curr = curr.next
-            currb = currb.next
+        #     curr = curr.next
+        #     currb = currb.next
 
+        # return None
+
+
+        visited=set()
+        while headA:
+            visited.add(headA)
+            headA=headA.next
+        while headB:
+            if headB in visited:
+                return headB
+            headB=headB.next
         return None
