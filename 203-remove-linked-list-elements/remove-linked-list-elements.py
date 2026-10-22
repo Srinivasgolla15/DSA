@@ -11,19 +11,29 @@ class Solution(object):
         :rtype: Optional[ListNode]
         """
 
-        curr = head 
-        prev = ListNode(0)
-        dummy = prev
-        dummy.next = head
-        while curr:
-            if curr.val == val:
-                nxt = curr.next
-                prev.next = nxt
-                curr = nxt
+        # curr = head 
+        # prev = ListNode(0)
+        # dummy = prev
+        # dummy.next = head
+        # while curr:
+        #     if curr.val == val:
+        #         nxt = curr.next
+        #         prev.next = nxt
+        #         curr = nxt
+        #     else:
+        #         prev = curr
+        #         curr = curr.next
+        # return dummy.next
+        if not head:
+            return head
+        dummy=ListNode(0,head)
+        cur=dummy
+        while cur.next:
+            if cur.next.val==val:
+                cur.next=cur.next.next
+                cur=cur
             else:
-                prev = curr
-                curr = curr.next
+                cur=cur.next
         return dummy.next
-
             
         
