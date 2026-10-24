@@ -9,19 +9,37 @@ class Solution(object):
         :type head: Optional[ListNode]
         :rtype: Optional[ListNode]
         """
-        if not head:
+        # if not head:
+        #     return head
+        # prev = head
+        # curr = head.next
+        # while curr :
+        #     if curr.val == prev.val:
+        #         nxt = curr.next
+        #         prev.next = nxt
+        #         curr=nxt
+        #     else:
+        #         nxt = curr.next
+        #         prev = curr
+        #         curr = nxt
+        
+        # return head
+        
+        if not head or not head.next:
             return head
-        prev = head
-        curr = head.next
-        while curr :
-            if curr.val == prev.val:
-                nxt = curr.next
-                prev.next = nxt
-                curr=nxt
+        prev= head 
+        curr = head
+        seen = set()
+        while curr:
+            nxt = curr.next
+            if curr.val in seen:
+                prev.next = curr.next
+                curr = nxt
             else:
-                nxt = curr.next
+                seen.add(curr.val)
                 prev = curr
                 curr = nxt
-        
         return head
+            
+
         
