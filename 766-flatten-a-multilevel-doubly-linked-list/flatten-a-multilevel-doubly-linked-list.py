@@ -63,26 +63,46 @@ class Node(object):
 
 class Solution(object):
     def flatten(self, head):
-        if not head:
-            return None
+        # if not head:
+        #     return None
 
-        stack = []
-        current = head
+        # stack = []
+        # current = head
 
-        while current or stack:
-            if current.child:
-                if current.next:
-                    stack.append(current.next)
-                current.next = current.child
-                current.child.prev = current
-                current.child = None
-            if not current.next and stack:
-                next_node = stack.pop()
-                current.next = next_node
-                next_node.prev = current
-            current = current.next
+        # while current or stack:
+        #     if current.child:
+        #         if current.next:
+        #             stack.append(current.next)
+        #         current.next = current.child
+        #         current.child.prev = current
+        #         current.child = None
+        #     if not current.next and stack:
+        #         next_node = stack.pop()
+        #         current.next = next_node
+        #         next_node.prev = current
+        #     current = current.next
 
+        # return head
+
+
+        curr = head
+        while curr:
+            nxt = curr.next
+            if curr.child:
+                flat = self.flatten(curr.child)
+                curr.next = flat
+                flat.prev = curr
+                tail = flat
+                while tail.next:
+                    tail = tail.next
+
+                tail.next = nxt
+                if nxt:
+                    nxt.prev = tail
+                curr.child = None
+            curr = curr.next
         return head
+
         
         
         
