@@ -8,10 +8,11 @@ class Solution(object):
         xor = x^y
         count = 0
         while xor:
-            r = xor%2
-            if r ==1:
-                count+=1
-            xor//=2
+            # r = xor%2
+            # if r ==1:
+            xor&=xor-1
+            count+=1
+            # xor//=2
         return count
 
         
