@@ -6,7 +6,7 @@ class Solution(object):
 
         while d >= n:
             i = 0
-            while (n << (i )) <= d:
+            while (n << i ) <= d:
                 i += 1
 
             d -= n << (i-1)
