@@ -102,39 +102,39 @@ class Solution(object):
         # Overall: O(n)
 
         # Step 1: Count frequencies
-        # freq = {}
-
-        # for num in nums:
-        #     freq[num] = freq.get(num, 0) + 1
-
-        # # Step 2: Create buckets
-        # bucket = [[] for _ in range(len(nums) + 1)]
-
-        # # Step 3: Place numbers into buckets
-        # for num, count in freq.items():
-        #     bucket[count].append(num)
-
-        # res = []
-
-        # # Step 4: Traverse buckets from highest frequency
-        # for i in range(len(bucket) - 1, 0, -1):
-
-        #     for num in bucket[i]:
-        #         res.append(num)
-
-        #         if len(res) == k:
-        #             return res
-
-
         freq = {}
-        
+
         for num in nums:
             freq[num] = freq.get(num, 0) + 1
+
+        # Step 2: Create buckets
+        bucket = [[] for _ in range(len(nums) + 1)]
+
+        # Step 3: Place numbers into buckets
+        for num, count in freq.items():
+            bucket[count].append(num)
+
+        res = []
+
+        # Step 4: Traverse buckets from highest frequency
+        for i in range(len(bucket) - 1, 0, -1):
+
+            for num in bucket[i]:
+                res.append(num)
+
+                if len(res) == k:
+                    return res
+
+
+        # freq = {}
         
-        heap = []
-        for key,val in freq.items():
-            heapq.heappush(heap,(val,key))
-            if len(heap)>k:
-                heapq.heappop(heap)
+        # for num in nums:
+        #     freq[num] = freq.get(num, 0) + 1
         
-        return [key for val, key in heap]
+        # heap = []
+        # for key,val in freq.items():
+        #     heapq.heappush(heap,(val,key))
+        #     if len(heap)>k:
+        #         heapq.heappop(heap)
+        
+        # return [key for val, key in heap]
