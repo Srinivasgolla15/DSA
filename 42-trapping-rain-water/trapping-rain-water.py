@@ -15,6 +15,10 @@ class Solution(object):
 
         # water = 0
 
+
+
+
+
         # while left < right:
 
         #     # process smaller side
@@ -75,30 +79,61 @@ class Solution(object):
 
         # return total
 
+# -------------
+        # n = len(height)
+        # if n == 0:
+        #     return 0
 
+        # left_max = [0] * n
+        # right_max = [0] * n
+
+        # # First pass: maximum height from the left
+        # left_max[0] = height[0]
+
+        # for i in range(1, n):
+        #     left_max[i] = max(left_max[i - 1], height[i])
+
+        # # Second pass: maximum height from the right
+        # right_max[n - 1] = height[n - 1]
+
+        # for i in range(n - 2, -1, -1):
+        #     right_max[i] = max(right_max[i + 1], height[i])
+
+        # # Calculate trapped water
+        # water = 0
+
+        # for i in range(n):
+        #     water += min(left_max[i], right_max[i]) - height[i]
+
+        # return water
+
+ 
         n = len(height)
+
         if n == 0:
             return 0
 
-        left_max = [0] * n
-        right_max = [0] * n
+        possible = [0] * n
 
-        # First pass: maximum height from the left
-        left_max[0] = height[0]
+        prevl = 0
 
-        for i in range(1, n):
-            left_max[i] = max(left_max[i - 1], height[i])
-
-        # Second pass: maximum height from the right
-        right_max[n - 1] = height[n - 1]
-
-        for i in range(n - 2, -1, -1):
-            right_max[i] = max(right_max[i + 1], height[i])
-
-        # Calculate trapped water
-        water = 0
-
+        # First pass: Left to right
         for i in range(n):
-            water += min(left_max[i], right_max[i]) - height[i]
+            currl = max(prevl, height[i])
+            possible[i] = currl - height[i]
+            prevl = currl
+
+        water = 0
+        prevr = 0
+
+        # Second pass: Right to left
+        for i in range(n - 1, -1, -1):
+            currr = max(prevr, height[i])
+
+            right_possible = currr - height[i]
+
+            water += min(possible[i], right_possible)
+
+            prevr = currr
 
         return water
