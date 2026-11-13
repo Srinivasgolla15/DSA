@@ -125,7 +125,60 @@ class Solution(object):
 
 
 # -----------------------------------------
+
   
+        # rows, cols = len(grid), len(grid[0])
+
+        # dq = deque()
+
+        # # Add all initially rotten oranges
+        # for i in range(rows):
+        #     for j in range(cols):
+        #         if grid[i][j] == 2:
+        #             dq.append((i, j))
+
+        # if not dq:
+        #     # No rotten oranges initially
+        #     for i in range(rows):
+        #         for j in range(cols):
+        #             if grid[i][j] == 1:
+        #                 return -1
+        #     return 0
+
+        # time = 0
+
+        # while dq:
+        #     size = len(dq)
+             
+
+        #     for _ in range(size):
+        #         r, c = dq.popleft()
+
+        #         directions = [(1,0), (-1,0), (0,1), (0,-1)]
+
+        #         for dr, dc in directions:
+        #             nr, nc = r + dr, c + dc
+
+        #             if (0 <= nr < rows and
+        #                 0 <= nc < cols and
+        #                 grid[nr][nc] == 1):
+
+        #                 grid[nr][nc] = 2
+        #                 dq.append((nr, nc))
+                        
+ 
+        #     time += 1
+
+        # # Check whether any fresh orange remains
+        # for i in range(rows):
+        #     for j in range(cols):
+        #         if grid[i][j] == 1:
+        #             return -1
+
+        # return time-1
+
+
+# ------------------------------------------------------
         rows, cols = len(grid), len(grid[0])
 
         dq = deque()
@@ -136,19 +189,11 @@ class Solution(object):
                 if grid[i][j] == 2:
                     dq.append((i, j))
 
-        if not dq:
-            # No rotten oranges initially
-            for i in range(rows):
-                for j in range(cols):
-                    if grid[i][j] == 1:
-                        return -1
-            return 0
-
         time = 0
 
         while dq:
             size = len(dq)
-             
+            changed = False
 
             for _ in range(size):
                 r, c = dq.popleft()
@@ -164,9 +209,10 @@ class Solution(object):
 
                         grid[nr][nc] = 2
                         dq.append((nr, nc))
-                        
- 
-            time += 1
+                        changed = True
+
+            if changed:
+                time += 1
 
         # Check whether any fresh orange remains
         for i in range(rows):
@@ -174,8 +220,7 @@ class Solution(object):
                 if grid[i][j] == 1:
                     return -1
 
-        return time-1
-
+        return time
 
 
                 
